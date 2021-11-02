@@ -1,0 +1,117 @@
+<script>
+
+
+
+
+    var rowMenu = [
+
+
+  {
+        label:"<i class='far fa-eye'></i> Podgląd",
+        action:function(e, row){
+            var val = row.getData().id;
+            var url = '/products/' + val + '/';
+            location.replace(url)
+        }
+    },
+
+
+]
+
+
+    var product_table = new Tabulator("#product_table", {
+        ajaxURL:"/api/json/products/",
+        layout:"fitDataFill",
+
+        rowContextMenu: rowMenu,
+        pagination:"local",
+        paginationSize:50,
+        paginationSizeSelector:[1, 10, 20, 50, 100, 1000],
+        movableColumns:true,
+        printAsHtml:true,
+        printHeader:"<h3>ENBOTIC TRACEABILTY SYSTEM<h3>&nbsp;&nbsp;<h4>-&nbsp;&nbsp;Referencje - {{ type.name }}<h4>",
+        printFooter:"<br>{% now "SHORT_DATETIME_FORMAT" %}<h4>",
+
+
+        locale:true,
+
+        columns:[
+            {title:"ID", field:"id", width:"120", headerFilter:"input"},
+            {title:"Kod", field:"part_code", width:"250", headerFilter:"input"},
+            {title:"Referencja", field:"reference", width:"350", headerFilter:"select", headerFilterParams:{values:true}},
+            {title:"Status", field:"status", width:"100", formatter:"tickCross", headerFilter:"tickCross", editor:"select",  editorParams:{values:{"true":"OK", "false":"NOK"}}, headerFilter:true, headerFilterParams:{values:{"true":"OK", "false":"NOK", "":"Wszystko"}}},  // headerFilterParams:{"tristate":true}, headerFilterEmptyCheck:function(value){return value === null}},
+            {title:"Data produkcji", field:"date", width:"200", headerFilter:"input"},    // editor:"select", editorParams:{values:{"male":"Male", "female":"Female"}}, headerFilter:true, headerFilterParams:{values:{"male":"Male", "female":"Female", "":""}}},
+          //  {title:"Czas cyklu", field:"cycle_time", width:"150", headerFilter:"input"},
+            {title:"Operator", field:"operator", headerFilter:"select", width:"230",  headerFilterParams:{values:true}},
+        ],
+
+    langs:{
+        "pl":{
+
+            "ajax":{
+                "loading":"Ładowanie", //ajax loader text
+                "error":"Błąd serwera", //ajax error text
+            },
+            "groups":{ //copy for the auto generated item count in group header
+                "item":"produkt", //the singular  for item
+                "items":"produkty", //the plural for items
+            },
+            "pagination":{
+            	"page_size":"Ilość na stronie", //label for the page size select element
+                "page_title":"Pokarz stronę",//tooltip text for the numeric page button, appears in front of the page number (eg. "Show Page" will result in a tool tip of "Show Page 1" on the page 1 button)
+                "first":"Pierwsza", //text for the first page button
+                "first_title":"Pierwsza strona", //tooltip text for the first page button
+                "last":"Ostatnia",
+                "last_title":"Ostatnia strona",
+                "prev":"Wstecz",
+                "prev_title":"Poprzednia strona",
+                "next":"Dalej",
+                "next_title":"Następna strona",
+                "all":"Wszystkie",
+            },
+            "headerFilters":{
+                "default":"Wyszukaj...",
+                "columns":{
+                    "reference":"Wybierz...",
+                    "operator":"Wybierz...",
+                    "status":"Wybierz...",
+                }
+            }
+        }
+    },
+
+    });
+
+
+
+
+
+
+document.getElementById("download-csv").addEventListener("click", function(){
+    product_table.download("csv", "Produkty_{% now "SHORT_DATETIME_FORMAT" %}.csv");
+});
+
+
+document.getElementById("download-json").addEventListener("click", function(){
+    product_table.download("json", "Produkty_{% now "SHORT_DATETIME_FORMAT" %}.json");
+});
+
+
+document.getElementById("download-xlsx").addEventListener("click", function(){
+    product_table.download("xlsx", "Produkty_{% now "SHORT_DATETIME_FORMAT" %}.xlsx", {sheetName:"Produkty"});
+});
+
+
+document.getElementById("download-pdf").addEventListener("click", function(){
+
+  product_table.print(false, true);
+
+});
+
+
+document.getElementById("download-html").addEventListener("click", function(){
+    product_table.download("html", "Produkty_{% now "SHORT_DATETIME_FORMAT" %}.html", {style:true});
+});
+
+
+</script>

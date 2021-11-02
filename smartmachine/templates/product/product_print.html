@@ -1,0 +1,242 @@
+
+
+{% extends "_print_.html" %}
+
+
+
+{% block title %}Wyprodukowane komponenty | ETS{% endblock %}
+
+
+{% load static %}
+
+
+
+{% block content %}
+
+<style media="print">
+.dark {
+      padding-top: 10px;
+      background-color: #282828;
+      color: white;
+}
+</style>
+
+
+<div class="invoice p-3 mb-3">
+              <!-- title row -->
+              <div class="row">
+
+                    <div class="col-12">
+                      <h3><em class="far fa-chart-bar"></em> PART REPORT</h3>
+                    </div>
+
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+              <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                  <small>Wygenerowano:</small>
+                  <address>
+                    <strong>Imie Nazwisko</strong><br>
+                    |inżynier procesu| <br>
+					imie.nazwisko@klient.com<br>
+                    20.07.2020r - 20:26<br>
+
+                  </address>
+                </div>
+                <!-- /.col -->                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+<hr>
+              <!-- Table row -->
+
+
+
+      </div>
+
+
+
+
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+
+
+			  <div class="row">
+
+
+            <div class="col-12">
+
+                <div class="card">
+
+
+
+                  <div class="card-body">
+
+                      <div class="row">
+
+                          <div class="col-12">
+                              <h3 class="card-title">Szczegóły:</h3>
+
+                              <table class="table">
+                                   <tbody>
+
+
+                                    <tr>
+                                      <th style="width: 50%">Kod</th>
+                                      <td>{{ part.part_number }}</td>
+                                    </tr>
+
+
+                                    <tr>
+                                      <th>Referencja</th>
+                                      <td>{{ part.reference }}</td>
+                                    </tr>
+
+
+                                    <tr>
+                                      <th>Status</th>
+                                      <td>{% if part.OK %}<i class="fas fa-check" style="color: green;"></i>{% else %}<i class="fas fa-times" style="color: red;"></i>{% endif %}</td>
+                                    </tr>
+
+
+
+                                 <tr>
+                                      <th>Data produkcji</th>
+                                      <td>{{ part.create_date }}</td>
+                                    </tr>
+
+
+                                  <tr>
+                                      <th>Operator</th>
+                                      <td>{{ part.operator }}</td>
+                                    </tr>
+
+
+                                  <tr>
+                                      <th>Czas cyklu</th>
+                                      <td>{{ part.cycle_time }}</td>
+                                  </tr>
+
+
+
+
+
+                                    {% for field in fields %}
+                                        <tr>
+                                              <th>{{ field.field.name }}</th>
+                                              <td>{{ field.value }}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                  </tbody>
+
+                                </table>
+
+                          </div>
+
+                    </div>
+
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+
+
+            <div class="col-12">
+
+                <div class="card">
+
+
+
+                  <div class="card-body">
+
+                      <div class="row">
+
+
+
+						  <style>
+                              .inspect-icon-ok { margin-right: 10px;  color: #2ECC71!important;}
+                              .inspect-icon-nok { margin-right: 10px; color: #E74C3C!important;}
+                              .inspect-description { margin-top: 10px!important; margin-left: 20px;}
+                              .inspect { margin-top: 20px!important;}
+                              .image-ok { border-style: solid; border-radius: 2%; border-color: #58D68D; border-width: 4px;}
+                              .image-nok { border-style: solid; border-radius: 2%; border-color: #E74C3C; border-width: 4px;}
+						  </style>
+
+
+
+
+
+
+                          <div class="col-12">
+
+
+ {% for img in images %}
+									  <div class="col-xl-6 col-12 inspect">
+
+										  <hr>
+
+										  <div class="inspect-title">
+											<i class="fas fa-video" style="margin-right: 10px"></i>{{ img.camera.name }}<br>
+                                              <small>Typ: {{ img.image_type.name }}</small>
+										  </div>
+
+										  <div class="inspect-photo">
+
+											  <a href="/media/{{ img.image }}" data-toggle="lightbox" data-title="sample 3 - red">
+												 <img src="/media/{{ img.image }}" class="img-fluid mb-2 {% if img.status %}image-ok{% else %}image-nok{% endif %}" alt="red sample">
+												</a>
+										  </div>
+
+
+
+										  <div class="inspect-description">
+                                              {% for inspect in inspects %}
+                                                    {% if inspect.image == img %}
+                                                        <div class="inspect-description-label"><a class="inspect-icon-{% if inspect.status %}ok{% else %}nok{% endif %}"><em class="fas fa-{% if inspect.status %}check{% else %}times{% endif %}"></em></a>{{inspect.tag.label}}</div>
+                                                    {% endif %}
+                                              {% endfor %}
+                                          </div>
+
+
+									  </div>
+                                  {% endfor %}
+
+
+
+                      </div>
+
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+
+        </div>
+
+
+
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+
+{% endblock %}
+
+
+
+
+
+{% block script %}
+
+
+
+    <!-- ADD SCRIPT-->
+   {% include "product/script.html" %}
+
+{% endblock %}
+

@@ -1,0 +1,363 @@
+
+
+{% extends "_main_.html" %}
+
+
+
+{% block title %}Wyprodukowane komponenty | ETS{% endblock %}
+
+
+{% load render_table from django_tables2 %}
+
+{% load querystring from django_tables2 %}
+
+
+
+{% load static %}
+
+
+
+{% block content %}
+
+<link rel="stylesheet" href=" {% static 'bootstrap-datepicker/css/bootstrap-datepicker3.css' %} ">
+
+<link rel="stylesheet" href=" {% static 'tabulator-master/dist/css/tabulator.css' %}" >
+<link rel="stylesheet" href=" {% static 'tabulator-master/dist/css/semantic-ui/tabulator_semantic-ui.css' %}" >
+
+<style>
+
+
+.small-th
+{
+  width: 5%;
+  height: 50px;
+}
+
+
+
+</style>
+
+
+<style>
+    .tabulator-print-header, tabulator-print-footer{
+        text-align:center;
+    }
+
+
+
+
+    /*Theme the Tabulator element*/
+    #product_table{
+        background-color:#fff;
+        border: 0px solid #333;
+        border-radius: 2px;
+    }
+
+    /*Theme the header*/
+    #product_table .tabulator-header .tabulator-headers .tabulator-col{
+
+        color: #ffffff;
+        background: #17a2b8 !important;
+    }
+
+    /*Allow column header names to wrap lines*/
+    #product_table .tabulator-header .tabulator-col,
+    #product_table .tabulator-header .tabulator-col-row-handle {
+        white-space: normal;
+    }
+
+    /*Color the table rows*/
+    #product_table .tabulator-tableHolder .tabulator-table .tabulator-row{
+
+        background: #f6f6f6
+
+    }
+
+    /*Color even rows*/
+        #product_table .tabulator-tableHolder .tabulator-table .tabulator-row:nth-child(even) {
+        background: #e9e9e9
+    }
+
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+     background-color: #17a2b8;!important;
+     color: #ffffff;
+    }
+
+    </style>
+
+
+
+<!-- Message -->
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li class="{{ message.tags }}">
+        {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!-- / Message -->
+
+
+
+
+
+
+<section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Wyprodukowane komponenty</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <div class="dropdown">
+
+
+                                 <button type="button" id="button_product_serch" class="btn btn-warning btn-lg" title="Wyszukaj produkt" data-toggle="modal" data-target="#serch_product"> <i class="fad fa-barcode-read fa-lg"></i></button>
+                &nbsp;&nbsp;
+
+
+
+
+                  <!-- BNT DOWNLOAD -->
+                                                <div class="btn-group">
+                                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                          <i class="fas fa-cloud-download-alt"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
+                                                          <a href="{% querystring '_export'='csv' %}" id="download-csv-{{ type.id }}" class="dropdown-item">.CSV</a>
+                                                        </div>
+                                                </div>
+
+
+
+
+
+                            </div>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+
+
+
+   {% load widget_tweaks%}
+
+
+
+
+
+
+
+
+
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="row">
+
+
+
+
+            <!-- Tabela -->
+            <div class="col-md-10">
+
+                <div class="card">
+
+
+                  <div class="card-body p-0">
+
+                        {% render_table table %}
+
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+
+
+
+            <!-- Tabela v2 -->
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body p-0">
+                        <div class="product_table" id="product_table"></div>
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+
+
+
+
+
+            <!-- Filtrowanie -->
+            <div class="col-md-2">
+
+                <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title"> <i class="fas fa-filter"></i> Filtrowanie</h3>
+
+                         <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                          <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                        </div>
+                      </div>
+
+
+
+                      <div class="card-body">
+
+
+
+                        <form method="get" class="form" >
+
+
+
+                                    <div class="form-group">
+                                            {{ filter.form.part_number.label_tag }}
+                                            {% render_field filter.form.part_number class="form-control"  %}
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                            {{ filter.form.reference.label_tag }}
+                                            {% render_field filter.form.reference class="form-control"  %}
+                                    </div>
+
+
+
+
+
+                                    <div class="form-group-inline">
+                                            {{ filter.form.date_range.label_tag }}
+                                            {% render_field filter.form.date_range class="form-control" %}
+                                    </div>
+
+
+
+
+
+
+
+
+                                    <div class="form-group">
+                                            {{ filter.form.operator.label_tag }}
+                                            {% render_field filter.form.operator class="form-control" %}
+                                    </div>
+
+
+
+
+
+                                    <div class="form-group">
+                                            {{ filter.form.part_ok.label_tag }}
+                                            {% render_field filter.form.part_ok class="form-control" %}
+                                    </div>
+
+
+
+                            <input type="submit" value="Filtruj" class="btn btn-info col-md-12"/>
+                        </form>
+
+
+
+
+
+
+                      </div>
+                 </div>
+            </div>
+
+          <!-- right col -->
+        </div>
+
+
+</div>
+
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="serch_product" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="serch_reference_title">Znajdź produkt</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+                    <br>
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="far fa-barcode-read fa-lg"></i></span>
+                    </div>
+                    <input type="text" class="form-control form-control-lg text-center" id="product_code_input" im-insert="true">
+                    </div>
+                    <br>
+
+
+
+          <div class="col-md-12 text-center">
+                 <button type="button" class="btn btn-white col-md-8" onclick="send_product()"><i class="fad fa-search"></i>&nbsp;&nbsp;&nbsp;Wyszukaj</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- / Modal -->
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block script %}
+
+    <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %} "></script>
+    <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.pl.min.js' %} "></script>
+
+        <!-- Tabela tabulator -->
+    <script src="{% static 'tabulator-master/dist/js/tabulator.min.js' %}"></script>
+
+     <!-- wtyczki tabulator xlsx / pdf -->
+    <script src="{% static 'download/pdf/jspdf.min.js' %}"></script>
+    <script src="{% static 'download/pdf/jspdf.plugin.autotable.js' %}"></script>
+    <script src="{% static 'download/xslx/xlsx.full.min.js' %}"></script>
+
+
+    <!-- ADD SCRIPT-->
+   {% include "product/script.html" %}
+
+   {% include "product/search_script.html" %}
+
+   {% include "product/table_script.html" %}
+
+
+{% endblock %}

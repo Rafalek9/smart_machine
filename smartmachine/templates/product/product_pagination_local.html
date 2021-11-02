@@ -1,0 +1,360 @@
+
+
+{% extends "_main_.html" %}
+
+
+
+{% block title %}Wyprodukowane komponenty | ETS{% endblock %}
+
+
+{% load render_table from django_tables2 %}
+
+{% load querystring from django_tables2 %}
+
+
+
+{% load static %}
+
+
+
+{% block content %}
+
+<link rel="stylesheet" href=" {% static 'bootstrap-datepicker/css/bootstrap-datepicker3.css' %} ">
+
+<link rel="stylesheet" href=" {% static 'tabulator-master/dist/css/tabulator.css' %}" >
+<link rel="stylesheet" href=" {% static 'tabulator-master/dist/css/semantic-ui/tabulator_semantic-ui.css' %}" >
+
+<style>
+
+
+.small-th
+{
+  width: 5%;
+  height: 50px;
+}
+
+
+
+</style>
+
+
+<style>
+
+    .tabulator-print-header, tabulator-print-footer{
+        text-align:center;
+    }
+
+
+    svg {
+    height: 20!important;
+    width: 20px!important;
+    }
+
+    #product_table{
+        background-color:#fff;
+        border: 0px solid #333;
+        border-radius: 2px;
+    }
+
+    /*Theme the header*/
+    #product_table .tabulator-header .tabulator-headers .tabulator-col{
+
+        color: #ffffff;
+
+        background: #17a2b8 !important;
+    }
+
+    #product_table .tabulator-headers{
+    background: #17a2b8 !important;
+    }
+
+    #product_table .tabulator-col-title {
+        font-size:120%;
+    }
+
+    /*Allow column header names to wrap lines*/
+    #product_table .tabulator-header .tabulator-col,
+    #product_table .tabulator-header .tabulator-col-row-handle {
+        white-space: normal;
+    }
+
+    /*Color the table rows*/
+    #product_table .tabulator-tableHolder .tabulator-table .tabulator-row{
+
+        background: #f6f6f6
+
+    }
+
+    /*Color even rows*/
+        #product_table .tabulator-tableHolder .tabulator-table .tabulator-row:nth-child(even) {
+        background: #e9e9e9
+    }
+
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+     background-color: #17a2b8;!important;
+     color: #ffffff;
+    }
+
+input[type=search] {
+  width: 100%;
+  background-color: #D4E6F1;
+  color: black;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+    </style>
+
+
+
+<!-- Message -->
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li class="{{ message.tags }}">
+        {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<!-- / Message -->
+
+
+
+
+
+
+<section class="content-header">
+      <div class="container-fluid">
+
+
+          <div class="row">
+
+
+
+
+
+
+
+          <div class="col-lg-2 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>{{img}}</h3>
+                <p>Liczba zdjęć</p>
+              </div>
+              <div class="icon">
+               <i class="fad fa-image-polaroid"></i>
+              </div>
+
+            </div>
+          </div>
+          <!-- ./col -->
+
+
+
+
+          <div class="col-lg-2 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>{{OK}}</h3>
+                <p>Sztuki OK</p>
+              </div>
+              <div class="icon">
+                <i class="fad fa-check"></i>
+              </div>
+
+            </div>
+          </div>
+          <!-- ./col -->
+
+
+
+          <div class="col-lg-2 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>{{NOK}}</h3>
+                <p>Sztuki NOK</p>
+              </div>
+              <div class="icon">
+                <i class="fad fa-times"></i>
+              </div>
+
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+
+
+
+
+
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Wyprodukowane komponenty</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <div class="dropdown">
+
+
+                                 <button type="button" id="button_product_serch" class="btn btn-warning btn-lg" title="Wyszukaj produkt" data-toggle="modal" data-target="#serch_product"> <i class="fad fa-barcode-read fa-lg"></i></button>
+                &nbsp;&nbsp;
+
+
+
+
+                                                <!-- BNT DOWNLOAD -->
+                                                <div class="btn-group float-right mr-2">
+                                                                    <button type="button" class="btn btn-info dropdown-toggle " data-toggle="dropdown" aria-expanded="false">
+                                                                      <i class="fas fa-cloud-download-alt"></i>
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
+                                                                      <a href="#" id="download-csv" class="dropdown-item">.CSV</a>
+                                                                      <a href="#" id="download-xlsx" class="dropdown-item">.XLSX</a>
+                                                                      <a href="#" id="download-html" class="dropdown-item">.HTML</a>
+                                                                      <a href="#" id="download-json" class="dropdown-item">.JSON</a>
+                                                                      <a href="#" id="download-pdf" class="dropdown-item">.PDF</a>
+                                                                    </div>
+                                                </div>
+
+
+
+
+
+                            </div>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+
+
+
+
+
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="row">
+
+            <!-- Tabela v2 -->
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body p-0">
+                        <div class="product_table" id="product_table"></div>
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+          <!-- row -->
+        </div>
+
+
+
+
+
+
+
+</div>
+
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="serch_product" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="serch_reference_title">Znajdź produkt</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <br>
+        <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="far fa-barcode-read fa-lg"></i></span>
+        </div>
+        <input type="text" class="form-control form-control-lg text-center" id="product_code_input" im-insert="true">
+        </div>
+        <br>
+
+
+
+          <div class="col-md-12 text-center">
+                 <button type="button" class="btn btn-white col-md-8" onclick="send_product()"><i class="fad fa-search"></i>&nbsp;&nbsp;&nbsp;Wyszukaj</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- / Modal -->
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block script %}
+
+    <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %} "></script>
+    <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.pl.min.js' %} "></script>
+
+        <!-- Tabela tabulator -->
+    <script src="{% static 'tabulator-master/dist/js/tabulator.min.js' %}"></script>
+
+     <!-- wtyczki tabulator xlsx / pdf -->
+    <script src="{% static 'download/pdf/jspdf.min.js' %}"></script>
+    <script src="{% static 'download/pdf/jspdf.plugin.autotable.js' %}"></script>
+    <script src="{% static 'download/xslx/xlsx.full.min.js' %}"></script>
+
+
+    <!-- ADD SCRIPT-->
+
+
+   {% include "product/search_script.html" %}
+
+   {% include "product/table_script.html" %}
+
+
+{% endblock %}

@@ -1,0 +1,482 @@
+{% extends "_main_.html" %}
+
+{% block title %}Wyprodukowane komponenty{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href=" {% static 'bootstrap-datepicker/css/bootstrap-datepicker3.css' %} ">
+<link rel="stylesheet" href=" {% static 'tabulator-master/dist/css/tabulator.css' %}" >
+<link rel="stylesheet" href=" {% static 'tabulator-master/dist/css/semantic-ui/tabulator_semantic-ui.css' %}" >
+
+
+<style>
+
+/*  table style */
+
+.custom-table {
+  }
+  .custom-table thead tr, .custom-table thead th {
+    border-top: none;
+    border-bottom: none !important; }
+  .custom-table tbody th, .custom-table tbody td {
+    color: #777;
+    font-weight: 400;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-weight: 300; }
+    .custom-table tbody th small, .custom-table tbody td small {
+      color: #b3b3b3;
+      font-weight: 300; }
+  .custom-table tbody tr:not(.spacer) {
+    border-radius: 7px;
+    overflow: hidden;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease; }
+    .custom-table tbody tr:not(.spacer):hover {
+      -webkit-box-shadow: 0 2px 10px -5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px -5px rgba(0, 0, 0, 0.1); }
+  .custom-table tbody tr th, .custom-table tbody tr td {
+    background: #ffffff;
+    border: none; }
+    .custom-table tbody tr th:first-child, .custom-table tbody tr td:first-child {
+      border-top-left-radius: 7px;
+      border-bottom-left-radius: 7px; }
+    .custom-table tbody tr th:last-child, .custom-table tbody tr td:last-child {
+      border-top-right-radius: 7px;
+      border-bottom-right-radius: 7px; }
+  .custom-table tbody tr.spacer td {
+    padding: 0 !important;
+    height: 10px;
+    border-radius: 0 !important;
+    background: transparent !important; }
+</style>
+
+
+
+<style>
+
+/*  timeline style */
+
+.hori-timeline {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.hori-timeline .events {
+    border-top: 3px solid #e9ecef;
+}
+.hori-timeline .events .event-list {
+    display: block;
+    position: relative;
+    text-align: center;
+    padding-top: 70px;
+    margin-right: 0;
+}
+.hori-timeline .events .event-list:before {
+    content: "";
+    position: absolute;
+    height: 36px;
+    border-right: 2px dashed #dee2e6;
+    top: 0;
+}
+.hori-timeline .events .event-list .event-date {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    right: 0;
+    width: 75px;
+    margin: 0 auto;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+@media (min-width: 1140px) {
+    .hori-timeline .events .event-list {
+        display: inline-block;
+        width: 12%;
+        padding-top: 45px;
+    }
+    .hori-timeline .events .event-list .event-date {
+        top: -12px;
+    }
+}
+.bg-soft-primary {
+    background-color: rgba(64,144,203,.3)!important;
+}
+.bg-soft-success {
+    background-color: rgba(71,189,154,.3)!important;
+}
+.bg-soft-danger {
+    background-color: rgba(231,76,94,.3)!important;
+}
+.bg-soft-warning {
+    background-color: rgba(249,213,112,.3)!important;
+}
+.card {
+    border: none;
+    margin-bottom: 24px;
+    -webkit-box-shadow: 0 0 13px 0 rgba(236,236,241,.44);
+    box-shadow: 0 0 13px 0 rgba(236,236,241,.44);
+}
+</style>
+
+
+
+<style>
+.jpg {
+  position: absolute;
+  max-height: 300px;
+  max-width: 300px;
+}
+
+.svg {
+  position: relative;
+}
+
+.good {
+   border-style: solid;
+   border-color: #27AE60;
+   border-width: 4px;
+   border-radius: 5px;
+}
+
+.bad {
+   border-style: solid;
+   border-color: #E74C3C;
+   border-width: 4px;
+   border-radius: 5px;
+}
+
+.column {
+  float: left;
+  width: 250px;
+  height: 250px;
+}
+
+</style>
+
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li class="{{ message.tags }}">
+        {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+
+
+
+
+
+<section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Szczegóły produktu</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+
+
+        <div class="container-fluid">
+
+               <div class="row">
+                <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <p class="mb-5">Podgląd procesu produkcyjnego:</p>
+
+                        <div class="hori-timeline" dir="ltr">
+                            <ul class="list-inline events">
+
+
+
+                                {% for p in process %}
+                                    <li class="list-inline-item event-list">
+                                        <div class="px-4">
+                                            <div class="event-date {% if p.status == '0' %}bg-dark{% endif %} {% if p.status == '1' %}bg-warning{% endif %}{% if p.status == '2' %}bg-green{% endif %}{% if p.status == '3' %}bg-danger{% endif %} text-success text-bold">ST-{{ p.station.number }}</div>
+                                            <h5 class="font-size-16"> {% if p.status == '0' %}---{% endif %} {% if p.status == '1' %}POMINIĘTO{% endif %}{% if p.status == '2' %}OK{% endif %}{% if p.status == '3' %}NOK{% endif %}</h5>
+
+                                            <div>
+                                                <p class="text-muted mb-0"><i class="fad fa-hourglass-start"></i> 3 min</p>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+                </div>
+
+
+                <div class="row">
+
+
+                    <div class="col-md-5">
+
+                        {% for p in process %}
+                            <div class="card p-4">
+                          <div class="card-title">Szczegóły procesu ST{{ p.station.number }}</div>
+                          <div class="card-body p-0">
+
+                            <table class="table custom-table">
+                                <tbody>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td><strong>{{p.id}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td>
+                                            {% if p.status == '0' %}<h5><span class="badge badge-secondary">&nbsp;&nbsp;BRAK&nbsp;&nbsp;</span></h5>
+                                            {% elif p.status == '1' %}<h5><span class="badge badge-warning">&nbsp;&nbsp;POMINIĘTO&nbsp;&nbsp;</span></h5>
+                                            {% elif  p.status == '2' %}<h5><span class="badge badge-success">&nbsp;&nbsp;OK&nbsp;&nbsp;</span></h5>
+                                            {% elif  p.status == '3' %}<h5><span class="badge badge-danger">&nbsp;&nbsp;NOK&nbsp;&nbsp;</span></h5>
+                                            {% elif  p.status == '4' %}<h5><span class="badge badge-dark">&nbsp;&nbsp;ANULOWANO&nbsp;&nbsp;</span></h5>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Paletka</th>
+                                        <td><strong>{{p.pallet.number}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Rozpoczęcie procesu</th>
+                                        <td><strong>{{p.start_process}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Zakończenie procesu</th>
+                                        <td><strong>{{p.end_process}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Operator</th>
+                                        <td><strong>{% if not p.operator  %} --- {% else %} {{p.operator}} {% endif %}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Typ procesu</th>
+                                        <td><strong>
+                                            {% if p.station.type == 'A' %}AUTO
+                                            {% elif p.station.type == 'SA' %}SEMI-AUTO
+                                            {% elif  p.station.type == 'M' %}MANU
+                                            {% endif %}
+                                        </strong></td>
+                                    </tr>
+
+
+
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+
+
+
+                    <div class="col-md-7">
+
+                        <div class="card p-4">
+                          <div class="card-title">Szczegóły produktu</div>
+                          <div class="card-body p-0">
+
+                            <table class="table custom-table">
+                                <tbody>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td><strong>{{product.id}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td>
+                                            {% if product.status == '0' %}<h5><span class="badge badge-secondary">&nbsp;&nbsp;BRAK&nbsp;&nbsp;</span></h5>
+                                            {% elif  product.status == '2' %}<h5><span class="badge badge-success">&nbsp;&nbsp;PRODUKT OK&nbsp;&nbsp;</span></h5>
+                                            {% elif  product.status == '3' %}<h5><span class="badge badge-danger">&nbsp;&nbsp;PRODUKT NOK&nbsp;&nbsp;</span></h5>
+                                            {% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Referencja</th>
+                                        <td><strong>{{product.reference.name}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Data rozpoczęcia</th>
+                                        <td><strong>{{product.start}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Data zakończenia</th>
+                                        <td><strong>{{product.end}}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+
+
+                        <div class="card p-4">
+                          <div class="card-title">Dane procesowe</div>
+                          <div class="card-body p-0">
+
+                            <table class="table custom-table">
+                                <tbody>
+
+                                    {% for pdv in process_data_value %}
+
+                                        <tr>
+                                            <th>{{pdv.field.name}}</th>
+                                            <td>
+                                                <strong>
+                                                  {{pdv.value}}
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <th><strong>Brak zapisanych danych</strong></th>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+
+
+
+                                </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+
+
+                        <div class="card p-4">
+                          <div class="card-title">Zdjęcia</div>
+                          <div class="card-body p-2">
+                              <div class="row">
+
+                                    {% for img in images %}
+                                          <div class="column p-2">
+                                            <img src="/media/{{ img.image }}" style="width:100%;" onclick="openModal();currentSlide( {{ forloop.counter }} )" class="hover-shadow cursor {% if img.status %} good {% else %} bad {% endif %}">
+                                            <span class="badge badge-{% if img.status %}success{% else %}danger{% endif %}">{{ img.camera.name }}</span>
+                                          </div>
+                                    {% empty %}
+                                        <div class="column ml-3" style="color:gray;">
+                                            <strong>Brak zapisanych zdjęć</strong>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+
+
+
+                          </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+        </div>
+
+    </section>
+  </div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="serch_product" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="serch_reference_title">Znajdź produkt</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <br>
+        <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="far fa-barcode-read fa-lg"></i></span>
+        </div>
+        <input type="text" class="form-control form-control-lg text-center" id="product_code_input" im-insert="true">
+        </div>
+        <br>
+
+
+
+          <div class="col-md-12 text-center">
+                 <button type="button" class="btn btn-white col-md-8" onclick="send_product()"><i class="fad fa-search"></i>&nbsp;&nbsp;&nbsp;Wyszukaj</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- / Modal -->
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block script %}
+
+    <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %} "></script>
+    <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.pl.min.js' %} "></script>
+
+        <!-- Tabela tabulator -->
+    <script src="{% static 'tabulator-master/dist/js/tabulator.min.js' %}"></script>
+
+     <!-- wtyczki tabulator xlsx / pdf -->
+    <script src="{% static 'download/pdf/jspdf.min.js' %}"></script>
+    <script src="{% static 'download/pdf/jspdf.plugin.autotable.js' %}"></script>
+    <script src="{% static 'download/xslx/xlsx.full.min.js' %}"></script>
+
+
+    <!-- ADD SCRIPT-->
+
+
+   {% include "app_production/list/script/search_script.html" %}
+
+   {% include "app_production/list/script/table_script.html" %}
+
+
+{% endblock %}

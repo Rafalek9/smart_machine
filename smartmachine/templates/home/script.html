@@ -1,0 +1,116 @@
+
+
+
+<script> // 1
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['REF1', 'REF2', 'REF3', 'REF4', 'REF5', 'REF6'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)'
+                ],
+
+            borderWidth: 1
+        }]
+    }
+
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+<script> //2
+
+	var ctx = document.getElementById('myChart2').getContext('2d');
+	var myChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [304, 256, 329, 365, 257, 95],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)',
+
+            ],
+
+            borderWidth: 1
+        }]
+    }
+
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+<script> //3
+
+	var ctx = document.getElementById('myChart3').getContext('2d');
+	var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [304, 156, 329, 521, 257, 31],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)',
+
+            ],
+
+            borderWidth: 1
+        }]
+    }
+
+});
+
+</script>
+
+
+
+
+
+<script>
+
+	moment.locale('pl');
+	$('.daterange').daterangepicker({
+		ranges   : {
+		'Dziś'       : [moment(), moment()],
+		'Wczoraj'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+		'Ostatnie 7 dni' : [moment().subtract(6, 'days'), moment()],
+		'Ostatnie 30 dni': [moment().subtract(29, 'days'), moment()],
+		'Obecny miesiąc'  : [moment().startOf('month'), moment().endOf('month')],
+		'Poprzedni miesiąc'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+	},
+		startDate: moment().subtract(29, 'days'),
+		endDate  : moment()
+	}, function (start, end) {
+		// window.alert('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+	})
+
+</script>

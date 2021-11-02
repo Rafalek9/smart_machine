@@ -1,0 +1,63 @@
+{% load static %}
+
+
+<!-- poprawa form HTML -->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %}</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href=" {% static 'fontawesome-free/css/all.min.css' %} ">
+
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="{% static 'tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %} ">
+
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'css/adminlte.min.css' %} ">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+
+<style>
+  footer {
+  font-size: 9px;
+  color: #f00;
+  text-align: center;
+}
+
+@page {
+  size: A4;
+  margin: 11mm 17mm 17mm 17mm;
+}
+
+@media print {
+  footer {
+    position: fixed;
+    bottom: 0;
+  }
+
+  .content-block, p {
+    page-break-inside: avoid;
+  }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+  }
+}
+</style>
+
+</head>
+<body>
+
+
+        {% block content %}{% endblock %}
+
+<script type="text/javascript">
+  window.addEventListener("load", window.print());
+</script>
+</body>
+</html>

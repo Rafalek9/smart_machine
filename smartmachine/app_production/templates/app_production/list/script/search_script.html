@@ -1,0 +1,43 @@
+
+<script>
+
+// Ustawienie focusa ma input skanowania referencji
+//
+var el = document.getElementById('product_code_input');
+document.getElementById('button_product_serch').onclick = function showHide4() {
+el.value = '';
+    setTimeout(function (){
+        el.style.backgroundColor = "#FDFEFE";
+        el.focus();
+    }, 500);
+
+
+};
+
+
+
+var el = document.getElementById('product_code_input');
+
+el.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    send_product();
+  }
+});
+
+
+
+
+
+function send_product() {
+
+    var el = document.getElementById('product_code_input');
+    var val = el.value;
+    if (val){
+    var url = '/products/find/' + val + '/';
+    location.replace(url)
+    }
+};
+
+
+</script>
