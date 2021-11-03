@@ -158,6 +158,219 @@
 </style>
 
 
+
+<!-- LIGHTBOX -->
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+.row > .column {
+  padding: 0 8px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column {
+  float: left;
+  width: 300px;
+}
+
+
+.column_sm {
+    display: inline!important;
+    float: left;
+    width: 150px;
+}
+
+
+ .small_row {
+    display: inline!important;
+    background-color: black;
+
+ }
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2040;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 800;
+
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 42px;
+  font-weight: bold;
+}
+
+#inspect_mode {
+  color: white;
+
+  font-size: 15px;
+
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* The Close Button */
+.inspect {
+  color: green;
+  position: absolute;
+  top: 2px;
+  right: 65px;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.inspect:hover,
+.inspect:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mySlides {
+  display: none;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 45%;
+
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white!important;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 5px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: -50;
+  border-radius: 5px;
+}
+
+/* Position the "next button" to the right */
+.prev {
+  left: -50;
+  border-radius: 5px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+img {
+  margin-bottom: -4px;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.jpg {
+  position: absolute;
+  max-height: 300px;
+  max-width: 300px;
+}
+
+.svg {
+  position: relative;
+}
+
+.good {
+   border-style: solid;
+   border-color: green;
+   border-width: 3px;
+   border-radius: 4px;
+}
+
+.bad {
+   border-style: solid;
+   border-color: red;
+   border-width: 3px;
+   border-radius: 4px;
+}
+
+</style>
+
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -176,11 +389,24 @@
 
 <section class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
+
+      <div class="row mb-2">
+
+
           <div class="col-sm-6">
-            <h1>Szczegóły produktu</h1>
+              <h1>Szczegóły produktu <a href="#">#{{product.id}}</a></h1>
           </div>
-        </div>
+
+          <div class="col-sm-6">
+              <h1>{% if product.status == '2' %}<span class="text-success ml-3"><i class="fad fa-check-circle"></i> OK</span>{% elif product.status == '3' %}<span class="text-danger ml-3"><i class="fad fa-times-circle"></i> NOK</span>{% endif %}</h1>
+          </div>
+
+
+
+      </div>
+
+
+
       </div><!-- /.container-fluid -->
     </section>
 
@@ -233,7 +459,7 @@
 
                         {% for p in process %}
                             <div class="card p-4">
-                          <div class="card-title">Szczegóły procesu ST{{ p.station.number }}</div>
+                          <div class="card-title pl-4 mb-3">Szczegóły procesu ST{{ p.station.number }}</div>
                           <div class="card-body p-0">
 
                             <table class="table custom-table">
@@ -294,7 +520,7 @@
                     <div class="col-md-7">
 
                         <div class="card p-4">
-                          <div class="card-title">Szczegóły produktu</div>
+                          <div class="card-title pl-4 mb-3">Szczegóły produktu</div>
                           <div class="card-body p-0">
 
                             <table class="table custom-table">
@@ -313,7 +539,7 @@
                                     </tr>
                                     <tr>
                                         <th>Referencja</th>
-                                        <td><strong>{{product.reference.name}}</strong></td>
+                                        <td><a href="#"><strong>{{product.reference.name}}</strong></a></td>
                                     </tr>
                                     <tr>
                                         <th>Data rozpoczęcia</th>
@@ -331,7 +557,7 @@
 
 
                         <div class="card p-4">
-                          <div class="card-title">Dane procesowe</div>
+                          <div class="card-title pl-4 mb-3">Dane procesowe</div>
                           <div class="card-body p-0">
 
                             <table class="table custom-table">
@@ -366,7 +592,7 @@
 
 
                         <div class="card p-4">
-                          <div class="card-title">Zdjęcia</div>
+                          <div class="card-title pl-4 mb-3">Zdjęcia</div>
                           <div class="card-body p-2">
                               <div class="row">
 
@@ -376,13 +602,55 @@
                                             <span class="badge badge-{% if img.status %}success{% else %}danger{% endif %}">{{ img.camera.name }}</span>
                                           </div>
                                     {% empty %}
-                                        <div class="column ml-3" style="color:gray;">
-                                            <strong>Brak zapisanych zdjęć</strong>
-                                        </div>
+
+                                            <p class="text-gray ml-4 mt-2">Brak zapisanych zdjęć</p>
+
                                     {% endfor %}
                                 </div>
 
 
+
+                                <div id="myModal" class="modal">
+                                  <span class="close cursor" onclick="closeModal()">&times;</span>
+
+
+
+                                  <div class="modal-content">
+
+
+                                        {% for img in images %}
+                                            <div class="mySlides">
+                                              <div class="numbertext">{{ img.camera.name }}</div>
+                                              <img src="/media/{{ img.image }}" style="position: absolute; width: 800px; height: 600px;">
+                                              <img src="/media/{{ img.inspect }}" style="position: relative; width: 800px; height: 600px;" class="insp" id="insp">
+                                            </div>
+                                        {% endfor %}
+
+
+
+                                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                                    <div class="caption-container">
+                                      <p id="caption"></p>
+                                    </div>
+
+
+
+                                      <div class="small_row">
+                                            {% for img in images %}
+                                                <div class="column_sm">
+                                                    <img class="demo cursor {% if img.status %} good {% else %} bad {% endif %}" src="/media/{{ img.image }}" style="width: 100%; margin-right: 10px!important;" onclick="currentSlide( {{ forloop.counter }} )" alt="{{ img.camera.name }}">
+                                                </div>
+                                            {% endfor %}
+                                      </div>
+
+
+
+
+
+                                    </div>
+                                </div>
 
 
                           </div>
@@ -445,7 +713,62 @@
 <!-- / Modal -->
 
 
+                                <script>
+                                function openModal() {
+                                  document.getElementById("myModal").style.display = "block";
+                                }
 
+                                function closeModal() {
+                                  document.getElementById("myModal").style.display = "none";
+                                }
+
+                                var slideIndex = 1;
+                                showSlides(slideIndex);
+
+                                function plusSlides(n) {
+                                  showSlides(slideIndex += n);
+                                }
+
+                                function currentSlide(n) {
+                                  showSlides(slideIndex = n);
+                                }
+
+                                function showSlides(n) {
+                                  var i;
+                                  var slides = document.getElementsByClassName("mySlides");
+                                  var dots = document.getElementsByClassName("demo");
+                                  var captionText = document.getElementById("caption");
+                                  if (n > slides.length) {slideIndex = 1}
+                                  if (n < 1) {slideIndex = slides.length}
+                                  for (i = 0; i < slides.length; i++) {
+                                      slides[i].style.display = "none";
+                                  }
+                                  for (i = 0; i < dots.length; i++) {
+                                      dots[i].className = dots[i].className.replace(" active", "");
+                                  }
+                                  slides[slideIndex-1].style.display = "block";
+                                  dots[slideIndex-1].className += " active";
+                                  captionText.innerHTML = dots[slideIndex-1].alt;
+                                }
+
+                                function HideInspect() {
+
+
+
+                                    if ( $(insp).css("visibility") == "visible" ) {
+                                      $(".insp").css('visibility', 'hidden');
+                                      $(".inspect").css('color', 'grey');
+                                    } else {
+                                        $(".insp").css('visibility', 'visible');
+                                        $(".inspect").css('color', 'green');
+                                    }
+
+                                }
+
+
+                                </script>
+
+                             <!-- LIGHTBOX -->
 
 
 
