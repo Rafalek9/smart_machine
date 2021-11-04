@@ -377,7 +377,9 @@
 
 
               <div class="col-sm-6">
+
                   <h1>Szczegóły produktu <a href="#">#{{product.id}}</a></h1>
+
               </div>
 
               <div class="col-sm-6">
@@ -440,7 +442,7 @@
                         <div class="col-md-5">
 
                             {% for p in process %}
-                                <div class="card p-4">
+                            <div class="card p-4">
                               <div class="card-title pl-4 mb-3">Szczegóły procesu ST{{ p.station.number }}</div>
                               <div class="card-body p-0">
 
@@ -493,6 +495,15 @@
                                 </table>
                               </div>
                             </div>
+                            {% empty %}
+                            <div class="card p-4">
+
+                              <div class="card-body p-0">
+
+                                    <p class="text-gray ml-4 mt-3">Brak zarejestrowanego procesu produkcyjnego</p>
+
+                              </div>
+                            </div>
                             {% endfor %}
                         </div>
 
@@ -502,6 +513,15 @@
                         <div class="col-md-7">
 
                             <div class="card p-4">
+
+                                {% if product.status == '2' or product.status == '3' %}
+                                    <div class="ribbon-wrapper ribbon-lg">
+                                        <div class="ribbon bg-{% if product.status == '2' %}success{% elif  product.status == '3' %}danger{% endif %}">
+                                          {% if product.status == '2' %}OK{% elif  product.status == '3' %}NOK{% endif %}
+                                        </div>
+                                  </div>
+                                {% endif %}
+
                               <div class="card-title pl-4 mb-3">Szczegóły produktu</div>
                               <div class="card-body p-0">
 
