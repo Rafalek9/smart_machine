@@ -12,4 +12,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('list/', views.product_list_view, name='product list'),
     path('detail/<int:pk>/', views.product_detail_view, name='product detail'),
+
+    path('image/list/', views.image_list_view, name='image list'),
 ]

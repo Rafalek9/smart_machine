@@ -37,6 +37,29 @@ def product_detail_view(request, pk):
     return render(request, 'app_production/product_detail/product_detail.html', data)
 
 
+def image_list_view(request):
+    """
+    Widok listy zdjęć / inspekcji wizycjnych
+    """
+    products = Product.objects.all()
+    stations = Station.objects.all()
+    images = Image.objects.all()
+
+    cnt_OK = Product.objects.filter(status='2').count()
+    cnt_NOK = Product.objects.filter(status='3').count()
+    cnt_brak = Product.objects.filter(status='0').count()
+
+    data = {
+        'products': products,
+        'stations': stations,
+        'images':images,
+        'cnt_OK': cnt_OK,
+        'cnt_NOK': cnt_NOK,
+        'cnt_brak': cnt_brak,
+    }
+    return render(request, 'app_production/image_list/image_list.html', data)
+
+
 class FullViewSet(viewsets.ModelViewSet):
     """
     API Viewset for full view of product/process/data
