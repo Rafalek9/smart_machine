@@ -41,7 +41,7 @@ class FullViewSet(viewsets.ModelViewSet):
     """
     API Viewset for full view of product/process/data
     """
-    queryset = Product.objects.all()
+    queryset = Product.objects.all() #.order_by('-id', )
     serializer_class = FullSerializer
 
 

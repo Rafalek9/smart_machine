@@ -33,6 +33,9 @@
         printHeader:"<h3>ENBOTIC SMART MACHINE<h3>",
         printFooter:"<br>{% now "SHORT_DATETIME_FORMAT" %}<h4>",
         locale:true,
+        initialSort:[
+            {column:"id", dir:"desc"},
+        ],
         columns:[
 
             {title:"Status", field:"status", width:"100", formatter:function(cell, formatterParams, onRendered)
