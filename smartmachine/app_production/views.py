@@ -20,7 +20,7 @@ def product_list_view(request):
         'cnt_NOK': cnt_NOK,
         'cnt_brak': cnt_brak,
     }
-    return render(request, 'app_production/list/product_list.html', data)
+    return render(request, 'app_production/product_list/product_list.html', data)
 
 
 def product_detail_view(request, pk):
@@ -34,7 +34,7 @@ def product_detail_view(request, pk):
         'process_data_value': process_data_value,
         'images': images,
     }
-    return render(request, 'app_production/detail/product_detail.html', data)
+    return render(request, 'app_production/product_detail/product_detail.html', data)
 
 
 class FullViewSet(viewsets.ModelViewSet):
