@@ -62,6 +62,7 @@ class ProcessDataField(models.Model):
     """
     station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="st")
     name = models.CharField(max_length=25)
+
     def __str__(self):
         return str(self.name)
 
@@ -73,6 +74,7 @@ class ProcessDataValue(models.Model):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="proc")
     field = models.ForeignKey(ProcessDataField, on_delete=models.CASCADE, related_name="field")
     value = models.CharField(max_length=50)
+
     def __str__(self):
         return str(self.field)
 
@@ -82,9 +84,11 @@ class Image(models.Model):
     Opis zdjęć z kamer
     """
     image = models.ImageField(upload_to='image/product/', null=True, blank=True, )
+    inspection = models.ImageField(upload_to='image/product/', null=True, blank=True, )
     camera = models.ForeignKey(Camera, on_delete=models.SET_NULL, null=True, related_name="cam")
     process = models.ForeignKey(Process, on_delete=models.SET_NULL, null=True, related_name="proces")
     status = models.BooleanField(default=False)
+    save_time = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
         return str(self.camera)

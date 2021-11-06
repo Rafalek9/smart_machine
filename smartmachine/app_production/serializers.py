@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Process, ProcessDataField, ProcessDataValue
+from .models import Product, Process, ProcessDataField, ProcessDataValue, Image
 from app_machine.models import Station, Pallet
 from app_reference.models import Reference
 
@@ -106,3 +106,18 @@ class OnlyProcessSerializer(serializers.ModelSerializer):
         model = Process
         fields = ['station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'extended_data', ]
         depth = 1
+
+
+class ImagesSerializer(serializers.ModelSerializer):
+    """
+    Serializator zdjęć z systemów wizyjnych
+    """
+
+    camera = serializers.SlugRelatedField(
+        many=False,
+        read_only=True,
+        slug_field='name')
+
+    class Meta:
+        model = Image
+        fields = ['id', 'image', 'inspection', 'camera', 'process', 'status', 'save_time', ]

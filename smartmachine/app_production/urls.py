@@ -5,7 +5,8 @@ from app_production import views
 router = routers.DefaultRouter()
 router.register(r'full_product', views.FullViewSet, basename='Full product')
 router.register(r'only_product', views.OnlyProductViewSet, basename='Only product')
-router.register(r'only_process', views.OnlyProcessSerializer, basename='Only process')
+router.register(r'only_process', views.OnlyProcessViewSet, basename='Only process')
+router.register(r'images', views.ImageViewSet, basename='Images')
 
 
 urlpatterns = [

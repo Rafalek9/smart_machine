@@ -57,11 +57,11 @@
 
         color: #ffffff;
 
-        background: #17a2b8 !important;
+        background: #17a2b8; !important;
     }
 
     #product_table .tabulator-headers{
-    background: #17a2b8 !important;
+    background: #17a2b8; !important;
     }
 
     #product_table .tabulator-col-title {
@@ -332,8 +332,10 @@ input[type=search] {
     <script src="{% static 'download/xslx/xlsx.full.min.js' %}"></script>
 
 
-    <!-- ADD SCRIPT-->
 
+    <script>
+        let actual_server_time = {% now "SHORT_DATETIME_FORMAT" %};
+    </script>
 
    {% include "app_production/image_list/script/search_script.html" %}
 
