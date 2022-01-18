@@ -26,7 +26,7 @@ class Product(models.Model):
         ('3', 'NOK'),
     ]
     id = models.BigAutoField(primary_key=True)
-    reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True)
+    reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True, related_name='product')
     status = models.CharField(max_length=3, choices=PART_STATUS, default='-')
     start = models.DateTimeField(default=datetime.datetime.now())
     end = models.DateTimeField(default=datetime.datetime.now())
@@ -38,9 +38,9 @@ class Process(models.Model):
     """
     Opis części procesu produkcyjnego - wykonywanego na danym stanowisku/stacji
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prod",)
-    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True)
-    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="process",)
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="process",)
+    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, related_name="process",)
     start_process = models.DateTimeField(default=datetime.datetime.now())
     end_process = models.DateTimeField(default=datetime.datetime.now())
     operator = models.IntegerField(null=True, blank=True)
@@ -60,7 +60,7 @@ class ProcessDataField(models.Model):
     """
     Opis pola dodatkowej wartości procesowej np.: "ST1-Ciśnienie" / "ST6-Wysokość_magnesu_4"
     """
-    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="st")
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="process_data_field")
     name = models.CharField(max_length=25)
 
     def __str__(self):
@@ -71,8 +71,8 @@ class ProcessDataValue(models.Model):
     """
     Opis wartości procesowej wybranego pola -> ProcesDataField
     """
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="proc")
-    field = models.ForeignKey(ProcessDataField, on_delete=models.CASCADE, related_name="field")
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="process_data_value")
+    field = models.ForeignKey(ProcessDataField, on_delete=models.CASCADE, related_name="process_data_value")
     value = models.CharField(max_length=50)
 
     def __str__(self):
@@ -85,8 +85,8 @@ class Image(models.Model):
     """
     image = models.ImageField(upload_to='image/product/', null=True, blank=True, )
     inspection = models.ImageField(upload_to='image/product/', null=True, blank=True, )
-    camera = models.ForeignKey(Camera, on_delete=models.SET_NULL, null=True, related_name="cam")
-    process = models.ForeignKey(Process, on_delete=models.SET_NULL, null=True, related_name="proces")
+    camera = models.ForeignKey(Camera, on_delete=models.SET_NULL, null=True, related_name="image")
+    process = models.ForeignKey(Process, on_delete=models.SET_NULL, null=True, related_name="image")
     status = models.BooleanField(default=False)
     save_time = models.DateTimeField(default=datetime.datetime.now())
 

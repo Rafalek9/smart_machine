@@ -1,8 +1,7 @@
 {% extends "_main_.html" %}
-
-{% block title %}Wyprodukowane komponenty{% endblock %}
-
+{% block title %}Dane procesowe{% endblock %}
 {% load static %}
+
 
 {% block content %}
 
@@ -358,9 +357,8 @@ img.hover-shadow {
 
 </style>
 
-
 {% if messages %}
-<ul class="messages">
+    <ul class="messages">
     {% for message in messages %}
         <li class="{{ message.tags }}">
         {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
@@ -368,7 +366,6 @@ img.hover-shadow {
     {% endfor %}
 </ul>
 {% endif %}
-
 
 <section class="content-header">
       <div class="container-fluid">
@@ -394,7 +391,6 @@ img.hover-shadow {
 
       </div><!-- /.container-fluid -->
 </section>
-
 <section class="content">
     <div class="container-fluid">
 
@@ -678,8 +674,6 @@ img.hover-shadow {
                 </div>
     </div>
 </section>
-
-
 </div>
 
 <!-- Modal -->
@@ -713,81 +707,71 @@ img.hover-shadow {
   </div>
 </div>
 <!-- / Modal -->
-
-
-
-
-
-
-
-
-{% include "app_production/product_detail/script/timeline_chart.html" %}
-
-
 {% endblock %}
 
 
 
+
+
+
 {% block script %}
-
-
+{% include "app_production/process_data_value/script/line_chart.html" %}
 <script>
-                                function openModal() {
-                                  document.getElementById("myModal").style.display = "block";
-                                }
+function openModal() {
+  document.getElementById("myModal").style.display = "block";
+}
 
-                                function closeModal() {
-                                  document.getElementById("myModal").style.display = "none";
-                                }
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
 
-                                var slideIndex = 1;
-                                showSlides(slideIndex);
+var slideIndex = 1;
+showSlides(slideIndex);
 
-                                function plusSlides(n) {
-                                  showSlides(slideIndex += n);
-                                }
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
 
-                                function currentSlide(n) {
-                                  showSlides(slideIndex = n);
-                                }
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
 
-                                function showSlides(n) {
-                                  var i;
-                                  var slides = document.getElementsByClassName("mySlides");
-                                  var dots = document.getElementsByClassName("demo");
-                                  var captionText = document.getElementById("caption");
-                                  if (n > slides.length) {slideIndex = 1}
-                                  if (n < 1) {slideIndex = slides.length}
-                                  for (i = 0; i < slides.length; i++) {
-                                      slides[i].style.display = "none";
-                                  }
-                                  for (i = 0; i < dots.length; i++) {
-                                      dots[i].className = dots[i].className.replace(" active", "");
-                                  }
-                                  slides[slideIndex-1].style.display = "block";
-                                  dots[slideIndex-1].className += " active";
-                                  captionText.innerHTML = dots[slideIndex-1].alt;
-                                }
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
 
-                                function HideInspect() {
-
-
-
-                                    if ( $(insp).css("visibility") == "visible" ) {
-                                      $(".insp").css('visibility', 'hidden');
-                                      $(".inspect").css('color', 'grey');
-                                    } else {
-                                        $(".insp").css('visibility', 'visible');
-                                        $(".inspect").css('color', 'green');
-                                    }
-
-                                }
+function HideInspect() {
 
 
-                                </script>
+
+    if ( $(insp).css("visibility") == "visible" ) {
+      $(".insp").css('visibility', 'hidden');
+      $(".inspect").css('color', 'grey');
+    } else {
+        $(".insp").css('visibility', 'visible');
+        $(".inspect").css('color', 'green');
+    }
+
+}
+
+
+</script>
 <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %} "></script>
 <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.pl.min.js' %} "></script>
-<!-- Tabela tabulator -->
 <script src="{% static 'tabulator-master/dist/js/tabulator.min.js' %}"></script>
 <script src="{% static 'download/pdf/jspdf.min.js' %}"></script>
 <script src="{% static 'download/pdf/jspdf.plugin.autotable.js' %}"></script>

@@ -30,13 +30,13 @@ class Fault(models.Model):
     Błąd może wskazywać na produkt / paletkę / stację lub jeżeli nic nie zostanie wskazane -
     zgłaszać usterkę globalną linii.
     """
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
-    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, blank=True)
-    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
+    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
     detect_time = models.DateTimeField(default=datetime.datetime.now())
     end_time = models.DateTimeField(default=datetime.datetime.now())
     operator = models.IntegerField(null=True, blank=True)
-    code = models.ForeignKey(FaultCode, on_delete=models.SET_NULL, null=True, blank=True)
+    code = models.ForeignKey(FaultCode, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
 
     def __str__(self):
         return "F#" + str(self.code) + " (" + str(self.station) + ")"

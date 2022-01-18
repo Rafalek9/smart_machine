@@ -1,0 +1,130 @@
+
+{% load static %}
+
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+}
+</style>
+
+<!-- Resources -->
+<script src="{% static 'amcharts5/index.js' %}"></script>
+<script src="{% static 'amcharts5/xy.js' %}"></script>
+<script src="{% static 'amcharts5/themes/Animated.js' %}"></script>
+
+<!-- Chart code -->
+<script>
+var root = am5.Root.new("chartdiv");
+root.dateFormatter.setAll({
+  dateFormat: "yyyy-MM-dd",
+  dateFields: ["valueX", "openValueX"]
+});
+
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+root.setThemes([
+  am5themes_Animated.new(root)
+]);
+
+
+// Create chart
+// https://www.amcharts.com/docs/v5/charts/xy-chart/
+var chart = root.container.children.push(am5xy.XYChart.new(root, {
+  panX: false,
+  panY: false,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  layout: root.verticalLayout
+}));
+
+
+// Add legend
+// https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+var legend = chart.children.push(am5.Legend.new(root, {
+  centerX: am5.p50,
+  x: am5.p50
+}))
+
+var colors = chart.get("colors");
+
+// Data
+var data = [
+
+    {% for p in process %}
+
+        {
+          category: "{{p.station}}",
+          start: new Date("{{ p.start_process.isoformat }}").getTime(),
+          end: new Date("{{ p.end_process.isoformat }}").getTime(),
+          columnSettings: {
+            fill: am5.Color.fromHex({% if p.status == '0' %}0xB2BABB{% endif %}
+                                    {% if p.status == '1' %}0xF4D03F{% endif %}
+                                    {% if p.status == '2' %}0x2ECC71{% endif %}
+                                    {% if p.status == '3' %}0xE74C3C{% endif %})
+          },
+          task: "{% if p.status == '0' %}---{% endif %} {% if p.status == '1' %}POMINIĘTO{% endif %}{% if p.status == '2' %}OK{% endif %}{% if p.status == '3' %}NOK{% endif %}"
+        },
+
+    {% endfor %}
+
+    ];
+
+
+// Create axes
+// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+var yAxis = chart.yAxes.push(
+  am5xy.CategoryAxis.new(root, {
+    categoryField: "category",
+    renderer: am5xy.AxisRendererY.new(root, {}),
+    tooltip: am5.Tooltip.new(root, {})
+  })
+);
+
+yAxis.data.setAll([
+  { category: "ST 7" },
+  { category: "ST 6" },
+  { category: "ST 5" },
+  { category: "ST 4" },
+  { category: "ST 3" },
+  { category: "ST 2" },
+  { category: "ST 1" },
+]);
+
+var xAxis = chart.xAxes.push(
+  am5xy.DateAxis.new(root, {
+    baseInterval: { timeUnit: "second", count: 1 },
+    renderer: am5xy.AxisRendererX.new(root, {})
+  })
+);
+
+
+// Add series
+// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+  xAxis: xAxis,
+  yAxis: yAxis,
+  openValueXField: "start",
+  valueXField: "end",
+  categoryYField: "category",
+  sequencedInterpolation: true
+}));
+
+series.columns.template.setAll({
+  templateField: "columnSettings",
+  strokeOpacity: 0,
+  tooltipText: "{category} - {task}"
+});
+
+series.data.setAll(data);
+
+// Add scrollbars
+chart.set("scrollbarX", am5.Scrollbar.new(root, { orientation: "horizontal" }));
+
+// Make stuff animate on load
+// https://www.amcharts.com/docs/v5/concepts/animations/
+series.appear();
+chart.appear(1000, 100);
+</script>

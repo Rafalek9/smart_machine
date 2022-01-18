@@ -42,7 +42,7 @@ class Camera(models.Model):
     Opis kamer na linii produkcyjnej
     """
     name = models.CharField(max_length=20)
-    station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True)
+    station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='camera')
     image_name = models.CharField(max_length=50, default='CAM1_IMG_', )
     inspection_name = models.CharField(max_length=50, default='CAM1_INSP_', )
     is_inspection = models.BooleanField(default=False, )

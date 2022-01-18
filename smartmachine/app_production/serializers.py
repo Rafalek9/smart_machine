@@ -121,3 +121,5 @@ class ImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'image', 'inspection', 'camera', 'process', 'status', 'save_time', ]
+
+
