@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from app_production.serializers import FullSerializer, OnlyProductSerializer, OnlyProcessSerializer, ImagesSerializer
+from app_production.serializers import FullSerializer, OnlyProductSerializer, OnlyProcessSerializer, ImagesSerializer, ProcessDataValueSerializer
 from rest_framework import viewsets
 from .models import Product, Process, ProcessDataField, ProcessDataValue, Image
 from app_machine.models import Station
@@ -81,3 +81,8 @@ class OnlyProcessViewSet(viewsets.ModelViewSet):
 class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImagesSerializer
+
+
+class ProcesDataViewSet(viewsets.ModelViewSet):
+    queryset = ProcessDataValue.objects.all()
+    serializer_class = ProcessDataValueSerializer

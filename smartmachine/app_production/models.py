@@ -3,6 +3,7 @@ from django.db import models
 from app_machine.models import Station, Pallet, Camera
 from app_reference.models import Reference
 
+
 """
 Model Relation:
 
@@ -26,21 +27,21 @@ class Product(models.Model):
         ('3', 'NOK'),
     ]
     id = models.BigAutoField(primary_key=True)
-    reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True, related_name='product')
+    reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True, related_name='products')
     status = models.CharField(max_length=3, choices=PART_STATUS, default='-')
     start = models.DateTimeField(default=datetime.datetime.now())
     end = models.DateTimeField(default=datetime.datetime.now())
     def __str__(self):
-        return str(self.id)
+        return str('prod_') + str(self.id)
 
 
 class Process(models.Model):
     """
     Opis części procesu produkcyjnego - wykonywanego na danym stanowisku/stacji
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="process",)
-    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="process",)
-    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, related_name="process",)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="products",)
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, )# related_name="process",)
+    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, )# related_name="process",)
     start_process = models.DateTimeField(default=datetime.datetime.now())
     end_process = models.DateTimeField(default=datetime.datetime.now())
     operator = models.IntegerField(null=True, blank=True)
@@ -64,15 +65,15 @@ class ProcessDataField(models.Model):
     name = models.CharField(max_length=25)
 
     def __str__(self):
-        return str(self.name)
+        return str(self.name) + str(' (') + str(self.station) + str(')')
 
 
 class ProcessDataValue(models.Model):
     """
     Opis wartości procesowej wybranego pola -> ProcesDataField
     """
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="process_data_value")
-    field = models.ForeignKey(ProcessDataField, on_delete=models.CASCADE, related_name="process_data_value")
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="process_data_value", null=True, blank=True)
+    field = models.ForeignKey(ProcessDataField, on_delete=models.CASCADE, )#related_name="process_data_value")
     value = models.CharField(max_length=50)
 
     def __str__(self):

@@ -10,7 +10,6 @@ router.register(r'pallet', PalletViewSet)
 router.register(r'station', StationViewSet)
 
 app_name = "app_machine"
-
 urlpatterns = [
     path('api/', include(router.urls)),
 ]

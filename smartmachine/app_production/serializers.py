@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 from .models import Product, Process, ProcessDataField, ProcessDataValue, Image
 from app_machine.models import Station, Pallet
 from app_reference.models import Reference
@@ -13,7 +14,7 @@ class ProcessDataFieldSerializer(serializers.ModelSerializer):
         fields = ['station', 'name', ]
 
 
-class ProcessDataValueSerializer(serializers.ModelSerializer):
+class ProcessDataValueSerializer(WritableNestedModelSerializer): #(serializers.ModelSerializer):
     """
     Serilizator wartości do dodatkowych pól procesowych
     """
@@ -25,17 +26,20 @@ class ProcessDataValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProcessDataValue
-        fields = ['field', 'value', ]
+        fields = ['process', 'field', 'value', ]
 
-    def create(self, validated_data):
-        return ProcessDataValue.objects.create(**validated_data)
+    """ 
+     def create(self, validated_data):
+        return ProcessDataValue.objects.create(**validated_data) 
+    """
 
 
 class ProcessSerializer(serializers.ModelSerializer):
     """
     Serializator procesu produkcyjnego
     """
-    extended_data = ProcessDataValueSerializer(source='proc', many=True, )
+    process_data = ProcessDataValueSerializer(source='process_data_value', many=True,)
+
     station = serializers.SlugRelatedField(
         many=False,
         read_only=False,
@@ -50,7 +54,7 @@ class ProcessSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Process
-        fields = ['station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'extended_data']
+        fields = ['station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'process_data']
         depth = 1
 
 
@@ -58,7 +62,7 @@ class FullSerializer(serializers.ModelSerializer):
     """
     Serializator kompletnego produktu z informacjami dziedziczonymi
     """
-    process = ProcessSerializer(source='prod', many=True, )
+    process = ProcessSerializer(source='products', many=True, ) # prod
     reference = serializers.SlugRelatedField(
         many=False,
         read_only=False,
@@ -85,11 +89,18 @@ class OnlyProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'status', 'reference', 'start', 'end', ]
 
 
-class OnlyProcessSerializer(serializers.ModelSerializer):
+class OnlyProcessSerializer(WritableNestedModelSerializer): #(serializers.ModelSerializer):
     """
-    Serializator procesów - bez informacji o produkcie końcowym
+    Serializator procesów
     """
-    extended_data = ProcessDataValueSerializer(source='proc', many=True, )
+    process_data = ProcessDataValueSerializer(source='process_data_value', many=True, required=False)
+
+    product = serializers.SlugRelatedField(
+        many=False,
+        read_only=False,
+        queryset=Product.objects.all(),
+        slug_field='id')
+
     station = serializers.SlugRelatedField(
         many=False,
         read_only=False,
@@ -104,8 +115,20 @@ class OnlyProcessSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Process
-        fields = ['station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'extended_data', ]
+        fields = ['id', 'product', 'station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'process_data', ]
         depth = 1
+
+        #def create(self, validated_data):
+        #    return Process.objects.create(**validated_data)
+
+    """   
+    def create(self, validated_data):
+        process_data = validated_data.pop('process_data', [])
+        p = Process.objects.create(**validated_data)
+        for pd in process_data:
+            ProcessDataValue.objects.create(process=p, **pd)
+        return process
+    """
 
 
 class ImagesSerializer(serializers.ModelSerializer):
