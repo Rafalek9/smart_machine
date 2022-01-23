@@ -11,7 +11,7 @@ class ProcessDataFieldSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = ProcessDataField
-        fields = ['station', 'name', ]
+        fields = ['station', 'name',]
 
 
 class ProcessDataValueSerializer(WritableNestedModelSerializer): #(serializers.ModelSerializer):
