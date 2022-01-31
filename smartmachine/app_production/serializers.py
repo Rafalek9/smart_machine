@@ -82,7 +82,7 @@ class OnlyProductSerializer(serializers.ModelSerializer):
         many=False,
         read_only=False,
         queryset=Reference.objects.all(),
-        slug_field='name')
+        slug_field='id')
 
     class Meta:
         model = Product

@@ -22,15 +22,15 @@ class Product(models.Model):
     Opis elementu scalającego obiekty klasy 'Process' w całościowy produkt linii produkcyjnej
     """
     PART_STATUS = [
-        ('0', '-'),
-        ('2', 'OK'),
-        ('3', 'NOK'),
+        (0, '-'),
+        (2, 'OK'),
+        (3, 'NOK'),
     ]
     id = models.BigAutoField(primary_key=True)
     reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True, related_name='products')
-    status = models.CharField(max_length=3, choices=PART_STATUS, default='-')
-    start = models.DateTimeField(default=datetime.datetime.now())
-    end = models.DateTimeField(default=datetime.datetime.now())
+    status = models.SmallIntegerField(choices=PART_STATUS, default=0)
+    start = models.DateTimeField(default=datetime.datetime.now(), blank=True, null=True)
+    end = models.DateTimeField(default=datetime.datetime.now(), blank=True, null=True)
     def __str__(self):
         return str('prod_') + str(self.id)
 
