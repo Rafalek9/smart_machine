@@ -8,37 +8,46 @@ class FaultCode(models.Model):
     """
     Lista błędów zarejestrowanych na lini przemysłowej
     """
-    code = models.CharField(max_length=10, unique=True)
     TYPE = [
-        ('0', '---'),
-        ('1', 'SAFETY'),
-        ('2', 'MEDIA'),
-        ('3', 'PROCESS'),
-        ('4', 'PART DEFECT'),
+        (0, '---'),
+        (1, 'SAFETY'),
+        (2, 'MEDIA'),
+        (3, 'PROCESS'),
+        (4, 'DEVICE'),
+        (5, 'OTHER'),
     ]
-    type = models.CharField(max_length=1, choices=TYPE, default='0')
+    PRIORITY = [
+        (0, 'CRITICAL'),
+        (1, 'HIGH'),
+        (2, 'MEDIUM'),
+        (3, 'LOW'),
+        (4, 'INFO'),
+        (5, '---'),
+    ]
+    type = models.IntegerField(choices=TYPE, default=0)
+    priority = models.IntegerField(choices=PRIORITY, default=5)
     description = models.CharField(max_length=255, blank=True)
     solution = models.CharField(max_length=255, blank=True)
 
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault_code')
+
     def __str__(self):
-        return str(self.code) + " - " + str(self.type)
+        return str(self.id)
 
 
 class Fault(models.Model):
     """
     Opis błędów zgłoszonych przez linie produkcyjną lub operatora.
     Błąd może wskazywać na produkt / paletkę / stację lub jeżeli nic nie zostanie wskazane -
-    zgłaszać usterkę globalną linii.
+    zgłaszać usterkę bez powiązań.
     """
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
-    station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
-    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
-    detect_time = models.DateTimeField(default=datetime.datetime.now())
-    end_time = models.DateTimeField(default=datetime.datetime.now())
-    operator = models.IntegerField(null=True, blank=True)
     code = models.ForeignKey(FaultCode, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
+    start = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
+    end = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
+
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault') # if the station is producing
+    pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')   # if the station has pallet -> mayby not have component
+    operator = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return "F#" + str(self.code) + " (" + str(self.station) + ")"
-
-
+        return "F#" + str(self.code)

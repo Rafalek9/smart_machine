@@ -27,7 +27,7 @@ class Product(models.Model):
         (3, 'NOK'),
     ]
     id = models.BigAutoField(primary_key=True)
-    reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True, related_name='products')
+    reference = models.ForeignKey(Reference, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
     status = models.SmallIntegerField(choices=PART_STATUS, default=0)
     start = models.DateTimeField(default=datetime.datetime.now(), blank=True, null=True)
     end = models.DateTimeField(default=datetime.datetime.now(), blank=True, null=True)

@@ -22,7 +22,7 @@ class ProcessDataValueSerializer(WritableNestedModelSerializer): #(serializers.M
         many=False,
         read_only=False,
         queryset=ProcessDataField.objects.all(),
-        slug_field='name')
+        slug_field='id')
 
     class Meta:
         model = ProcessDataValue
@@ -80,6 +80,7 @@ class OnlyProductSerializer(serializers.ModelSerializer):
     """
     reference = serializers.SlugRelatedField(
         many=False,
+        required=False,
         read_only=False,
         queryset=Reference.objects.all(),
         slug_field='id')

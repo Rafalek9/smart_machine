@@ -4,12 +4,12 @@ from .models import Fault, FaultCode
 
 class FaultAdmin(admin.ModelAdmin):
     model = Fault
-    list_display = ['station', 'pallet', 'product', 'detect_time', 'operator']
+    list_display = ['id', 'code', 'start', 'end', ]
 
 
 class FaultCodeAdmin(admin.ModelAdmin):
     model = FaultCode
-    list_display = ['code', 'type', 'description']
+    list_display = ['id', 'type', 'priority', 'station', ]
 
 
 admin.site.register(Fault, FaultAdmin)
