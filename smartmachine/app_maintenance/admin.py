@@ -9,7 +9,8 @@ class FaultAdmin(admin.ModelAdmin):
 
 class FaultCodeAdmin(admin.ModelAdmin):
     model = FaultCode
-    list_display = ['id', 'type', 'priority', 'station', ]
+    list_display = ['id', 'description', 'type', 'priority', 'station', ]
+    list_filter = ['type', 'priority', 'station', ]
 
 
 admin.site.register(Fault, FaultAdmin)

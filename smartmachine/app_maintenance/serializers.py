@@ -1,16 +1,18 @@
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Station, Pallet
+from .models import Fault, FaultCode
 
 
-class StationSerializer(serializers.HyperlinkedModelSerializer):
+class FaultSerializer(serializers.ModelSerializer):
+
+    code = serializers.SlugRelatedField(
+        many=False,
+        read_only=False,
+        queryset=FaultCode.objects.all(),
+        slug_field='id')
+
     class Meta:
-        model = Station
-        fields = ['number', 'title', 'type', ]
+        model = Fault
+        fields = ['id', 'code', 'start', 'end', 'product', 'pallet', 'operator', ]
 
-
-class PalletSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Pallet
-        fields = ['number', 'type', 'register_date', 'number_of_cycle', 'cycle_limit', 'defect_limit', ]

@@ -43,7 +43,7 @@ class Fault(models.Model):
     """
     code = models.ForeignKey(FaultCode, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')
     start = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
-    end = models.DateTimeField(default=datetime.datetime.now(), null=True, blank=True)
+    end = models.DateTimeField(null=True, blank=True)
 
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault') # if the station is producing
     pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, blank=True, related_name='fault')   # if the station has pallet -> mayby not have component
