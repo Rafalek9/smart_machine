@@ -49,8 +49,10 @@ def clear_station_faults(request, station_number):
 
 def clear_all_faults(request):
     """
+
     Funkcja widoku. Usuwa aktualne alarmy całej maszyny.
     Ustawia czas zakończenia usterki na aktualny czas serwera.
+
     """
     faults = Fault.objects.filter(end=None, )
     quantity = faults.count()
