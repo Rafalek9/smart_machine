@@ -32,7 +32,7 @@ class Product(models.Model):
     start = models.DateTimeField(default=datetime.datetime.now(), blank=True, null=True)
     end = models.DateTimeField(default=datetime.datetime.now(), blank=True, null=True)
     def __str__(self):
-        return str('prod_') + str(self.id)
+        return str('PRODUCT #') + str(self.id)
 
 
 class Process(models.Model):
@@ -54,7 +54,7 @@ class Process(models.Model):
     ]
     status = models.CharField(max_length=1, choices=PROCESS_STATUS, default='0')
     def __str__(self):
-        return str(self.product) + " - " + str(self.station)
+        return " (" + str(self.station) + ") - " + str(self.product)
 
 
 class ProcessDataField(models.Model):
@@ -63,9 +63,20 @@ class ProcessDataField(models.Model):
     """
     station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="process_data_field")
     name = models.CharField(max_length=25)
+    FIELD_TYPE = [
+        ('B', 'BOOL'),
+        ('I', 'INT'),
+        ('R', 'REAL'),
+        ('S', 'STRING'),
+        ('DT', 'DATE-TIME'),
+        ('D', 'DATE'),
+        ('T', 'TIME'),
+
+    ]
+    type = models.CharField(max_length=2, choices=FIELD_TYPE, default='R')
 
     def __str__(self):
-        return str(self.name) + str(' (') + str(self.station) + str(')')
+        return str(self.name) + str('-') + str(self.station) + str(' (') + str('') + str(')')
 
 
 class ProcessDataValue(models.Model):

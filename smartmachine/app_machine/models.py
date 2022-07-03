@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-
 class Station(models.Model):
     """
     Opis stacji/stanowiska na lini produkcyjnej

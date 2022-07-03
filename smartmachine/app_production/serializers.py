@@ -26,7 +26,7 @@ class ProcessDataValueSerializer(WritableNestedModelSerializer): #(serializers.M
 
     class Meta:
         model = ProcessDataValue
-        fields = ['process', 'field', 'value', ]
+        fields = ['id','process', 'field', 'value', ]
 
     """ 
      def create(self, validated_data):
@@ -54,7 +54,7 @@ class ProcessSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Process
-        fields = ['station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'process_data']
+        fields = ['id' ,'station', 'pallet', 'start_process', 'end_process', 'operator', 'status', 'process_data']
         depth = 1
 
 
