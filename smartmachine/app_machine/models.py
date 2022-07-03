@@ -38,13 +38,37 @@ class Pallet(models.Model):
 
 class Camera(models.Model):
     """
-    Opis kamer na linii produkcyjnej
+    Description of cameras on the production line
     """
     name = models.CharField(max_length=20)
     station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='camera')
-    image_name = models.CharField(max_length=50, default='CAM1_IMG_', )
-    inspection_name = models.CharField(max_length=50, default='CAM1_INSP_', )
+    image_name = models.CharField(max_length=50, default='cam0_img_', )
+    inspection_name = models.CharField(max_length=50, default='cam0_insp_', )
     is_inspection = models.BooleanField(default=False, )
 
     def __str__(self):
         return str(self.name)
+
+
+class Status(models.Model):
+    """
+    Machine operating status
+    """
+    STATUS_TYPE = [
+        (0, '---'),
+        (1, 'Bazowanie'),
+        (2, 'Przezbrojenie'),
+        (3, 'Produkcja'),
+        (4, 'Tryb ręczny'),
+        (5, 'Awaria'),
+        (6, 'OFF'),
+        (7, '---'),
+    ]
+
+    type = models.SmallIntegerField(choices=STATUS_TYPE, default=0)
+    station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='status')
+    start = models.DateTimeField(default=datetime.datetime.now())
+    end = models.DateTimeField(default=datetime.datetime.now())
+
+    def __str__(self):
+        return str(self.station) + str(' - ') + str(self.type)

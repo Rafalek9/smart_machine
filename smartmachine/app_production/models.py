@@ -59,7 +59,7 @@ class Process(models.Model):
 
 class ProcessDataField(models.Model):
     """
-    Opis pola dodatkowej wartości procesowej np.: "ST1-Ciśnienie" / "ST6-Wysokość_magnesu_4"
+    Opis pola dodatkowej wartości procesowej np.: "CAM1-Ciśnienie" / "ST6-Wysokość_magnesu_4"
     """
     station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, related_name="process_data_field")
     name = models.CharField(max_length=25)
