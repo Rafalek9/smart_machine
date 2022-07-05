@@ -2,8 +2,8 @@ import datetime
 
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
-from app_maintenance.serializers import FaultSerializer
-from app_maintenance.models import Fault
+from app_maintenance.serializers import FaultSerializer, StatusSerializer
+from app_maintenance.models import Fault, Status
 from rest_framework import viewsets
 from django.http import JsonResponse
 
@@ -11,6 +11,11 @@ from django.http import JsonResponse
 class FaultViewSet(viewsets.ModelViewSet):
     queryset = Fault.objects.all()
     serializer_class = FaultSerializer
+
+
+class StatusViewSet(viewsets.ModelViewSet):
+    queryset = Status.objects.all()
+    serializer_class = StatusSerializer
 
 
 def clear_selected_faults(request, code):

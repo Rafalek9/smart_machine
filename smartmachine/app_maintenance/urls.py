@@ -4,7 +4,8 @@ from app_maintenance import views
 
 
 router = routers.DefaultRouter()
-router.register(r'fault', views.FaultViewSet, basename='Błędy')
+router.register(r'fault', views.FaultViewSet, basename='faults')
+router.register(r'status', views.StatusViewSet, basename='statuss')
 
 
 app_name = "app_maintenance"
