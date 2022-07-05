@@ -51,3 +51,36 @@ class Fault(models.Model):
 
     def __str__(self):
         return "F#" + str(self.code)
+
+
+class Status(models.Model):
+    """
+    Machine operating status
+    """
+    NOP = 0
+    OFF = 1
+    HOMING = 2
+    CHANGEOVER = 3
+    PRODUCTION = 4
+    MANU = 5
+    ALARM = 6
+    SAFETY = 7
+
+    STATUS_TYPE = [
+        (NOP, '---'),
+        (OFF, 'OFF'),
+        (HOMING, 'Bazowanie'),
+        (CHANGEOVER, 'Przezbrojenie'),
+        (PRODUCTION, 'Produkcja'),
+        (MANU, 'Tryb ręczny'),
+        (ALARM, 'Awaria'),
+        (SAFETY, 'Błąd bezpieczeństwa'),
+    ]
+
+    type = models.SmallIntegerField(choices=STATUS_TYPE, default=0)
+    station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='status')
+    start = models.DateTimeField(default=datetime.datetime.now())
+    end = models.DateTimeField(default=datetime.datetime.now())
+
+    def __str__(self):
+        return str(self.station) + str(' - ') + str(self.type)

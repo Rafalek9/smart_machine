@@ -48,27 +48,3 @@ class Camera(models.Model):
 
     def __str__(self):
         return str(self.name)
-
-
-class Status(models.Model):
-    """
-    Machine operating status
-    """
-    STATUS_TYPE = [
-        (0, '---'),
-        (1, 'Bazowanie'),
-        (2, 'Przezbrojenie'),
-        (3, 'Produkcja'),
-        (4, 'Tryb ręczny'),
-        (5, 'Awaria'),
-        (6, 'OFF'),
-        (7, '---'),
-    ]
-
-    type = models.SmallIntegerField(choices=STATUS_TYPE, default=0)
-    station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='status')
-    start = models.DateTimeField(default=datetime.datetime.now())
-    end = models.DateTimeField(default=datetime.datetime.now())
-
-    def __str__(self):
-        return str(self.station) + str(' - ') + str(self.type)
