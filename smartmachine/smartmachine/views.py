@@ -9,8 +9,8 @@ def dashboard_view(request):
     stations = Station.objects.all()
     stats = []
 
-    for st in stations:
-        stats.append({st, st.status.last()})
+  #  for st in stations:
+  #      stats.append({st, st.status.last()})
 
 
     context = {

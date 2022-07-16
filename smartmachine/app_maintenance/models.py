@@ -78,7 +78,7 @@ class Status(models.Model):
     ]
 
     type = models.SmallIntegerField(choices=STATUS_TYPE, default=0)
-    station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='status')
+    yes = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL, blank=True, related_name='status')
     start = models.DateTimeField(default=datetime.datetime.now())
     end = models.DateTimeField(default=datetime.datetime.now())
 
