@@ -39,7 +39,7 @@ class Process(models.Model):
     """
     Opis części procesu produkcyjnego - wykonywanego na danym stanowisku/stacji
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="products",)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="process",)
     station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, )# related_name="process",)
     pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, )# related_name="process",)
     start_process = models.DateTimeField(default=datetime.datetime.now())
