@@ -39,7 +39,7 @@ class Process(models.Model):
     """
     Opis części procesu produkcyjnego - wykonywanego na danym stanowisku/stacji
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="process",)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="process2",)
     station = models.ForeignKey(Station, on_delete=models.SET_NULL, null=True, )# related_name="process",)
     pallet = models.ForeignKey(Pallet, on_delete=models.SET_NULL, null=True, )# related_name="process",)
     start_process = models.DateTimeField(default=datetime.datetime.now())
@@ -71,19 +71,18 @@ class ProcessDataField(models.Model):
         ('DT', 'DATE-TIME'),
         ('D', 'DATE'),
         ('T', 'TIME'),
-
     ]
     type = models.CharField(max_length=2, choices=FIELD_TYPE, default='R')
 
     def __str__(self):
-        return str(self.name) + str('-') + str(self.station) + str(' (') + str('') + str(')')
+        return str(self.station) + str('- (') + str(self.name) + str(')')
 
 
 class ProcessDataValue(models.Model):
     """
     Opis wartości procesowej wybranego pola -> ProcesDataField
     """
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="process_data_value", null=True, blank=True)
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name="process_data_value", null=True)
     field = models.ForeignKey(ProcessDataField, on_delete=models.CASCADE, )#related_name="process_data_value")
     value = models.CharField(max_length=50)
 

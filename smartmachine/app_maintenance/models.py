@@ -6,7 +6,7 @@ from app_production.models import Product
 
 class FaultCode(models.Model):
     """
-    Lista błędów zarejestrowanych na lini przemysłowej
+    Lista błędów zarejestrowanych na lini przemysłowej (do dodania - pole z referencją?)
     """
     TYPE = [
         (0, '---'),

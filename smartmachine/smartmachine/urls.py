@@ -24,6 +24,6 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-admin.site.site_header = 'Enbotic Smart Machine'
-admin.site.index_title = 'Traceability'
+admin.site.site_header = 'Traceability System'
+admin.site.index_title = 'Admin Interface'
 admin.site.site_title = 'Smart Machine'

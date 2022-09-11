@@ -62,7 +62,7 @@ class FullSerializer(serializers.ModelSerializer):
     """
     Serializator kompletnego produktu z informacjami dziedziczonymi
     """
-    process = ProcessSerializer(source='products', many=True, ) # prod
+    process = ProcessSerializer(source='process2', many=True, ) # prod
     reference = serializers.SlugRelatedField(
         many=False,
         read_only=False,
@@ -145,5 +145,4 @@ class ImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'image', 'inspection', 'camera', 'process', 'status', 'save_time', ]
-
 
